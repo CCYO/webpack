@@ -6,15 +6,13 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 process.env.NODE_ENV = "development";
 
 const commonCssLoader = [
-    "style-loader",
-    /*
+    //"style-loader",
     {
         loader: MiniCssExtractPlugin.loader,
         options: {
-    //        publicPath: '/static/'
+            //publicPath: '/style/'
         }
     },
-    */
     "css-loader",
 ]
 
@@ -23,7 +21,7 @@ module.exports = {
     output: {
         filename: 'js/index.js',
         path: resolve(__dirname, 'build'),
-        publicPath: '/static/'
+        //publicPath: '/static/'
     },
     module: {
         rules: [
@@ -31,9 +29,10 @@ module.exports = {
                 test: /\.(ttf|woff(\d)?|svg|eot)$/,
                 loader: "url-loader",
                 options: {
+                    limit: 0,
                     name: '[name]-[hash:10].[ext]',
                     outputPath: 'media',
-                    publicPath: '/static/media/'
+                    publicPath: '/media/'
                 }
             },
             {
@@ -61,9 +60,12 @@ module.exports = {
                             //  小於8K,作base64處理
                             limit: 8 * 1024,
                             esModule: false,
-                            name: '[name]-[hash:10].[ext]',
+                            name: '[name].[ext]',
+                            //  生成路徑
                             outputPath: 'img',
-                            publicPath: '/static/img/'
+                            //  引用路徑
+                            publicPath: '/img/'
+                            //  /static/img/img/dog
                         }
                     },
                     {
@@ -92,9 +94,12 @@ module.exports = {
     devServer: {
         //  指定devServer打包生成的靜態文件,要在記憶體哪個位置
         //      若無設置 > 取output["publicPath"],再無 > "/"
-        publicPath: "/",
+        //  devServer打包後,將文檔放入內存的指定路徑
+        //publicPath: "/static/",
         //  指定devServer前往哪裡取得文件
-        contentBase: resolve(__dirname, 'build'),
+        //      指定devServer前往哪裡取得index.html
+        //contentBase: resolve(__dirname, 'src'),
+        //contentBase: '/static/',
         compress: true,
         port: 8080,
         hot: true
